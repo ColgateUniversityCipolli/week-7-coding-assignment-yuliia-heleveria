@@ -21,10 +21,29 @@
     \item Write a \texttt{pois.prob()} function that computes $P(X=x)$, 
     $P(X \neq x)$, $P(X<x)$, $P(X \leq x)$, $P(X > x)$, and $P(X \geq x).$ Enable the user to specify the rate parameter $\lambda$.
 <<size="scriptsize">>=
-pois.prob <- function(x, size, prob, type="<="){
-  # Use dpois and ppois to conditionally return the correct probability
+pois.prob <- function(x, lambda, type="<="){
+  #check if x is valid for Poisson distribution
+  if (x<0 | x != floor(x)){
+    return("Invalid argument for 'x'")
+  }
+  if (type == "="){ #compute P(X=x)
+    return(dpois(x, lambda))
+  }else if(type == "!="){  #compute P(X!=x)
+    return(1 - dpois(x, lambda))
+  }else if(type == "<"){  #compute P(X<x)
+    return(ppois(x -1, lambda))
+  }else if(type == "<="){ #compute P(X<=x)
+    return(ppois(x, lambda))
+  }else if(type == ">"){  #compute P(X>x)
+    return(1 - ppois(x,lambda))
+  }else if (type == ">="){  #compute P(X>=x)
+    return(1 - ppois(x -1,lambda))
+  }else{
+    return("Invalid argument for 'type'")
+  }
 }
 @
+Poisson distribution is discrete probability distribution. We use \texttt{dpois()} function to compute PMF and \texttt{ppois()} function to calculate CDF. The parameter \texttt{x} cannot be negative and it must be an integer. The function checks if the correct argument for parameters \texttt{x} and \texttt{type} were passed and the function computes the probability based on the parameter \texttt{type}. 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Question 2
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,10 +52,29 @@ pois.prob <- function(x, size, prob, type="<="){
     for a beta distribution. Enable the user to specify the shape parameters
     $\alpha$ and $\beta$.
 <<size="scriptsize">>=
-beta.prob <- function(x, size, prob, type="<="){
-  # Use dbeta and pbeta to conditionally return the correct probability
+beta.prob <- function(x, alpha, beta, type="<="){
+  #check if x is valid for Beta distribution
+  if (x<0 | x>1){
+    return("Invalid argument for 'x'")
+  }
+  if (type == "="){ #compute P(X=x)
+    return(0) #continuous distribution
+  }else if(type == "!="){  #compute P(X!=x)
+    return(1) #continuous distribution
+  }else if(type == "<"){  #compute P(X<x)
+    return(pbeta(x, alpha, beta))
+  }else if(type == "<="){ #compute P(X<=x)
+    return(pbeta(x, alpha, beta))
+  }else if(type == ">"){  #compute P(X>x)
+    return(1 - pbeta(x, alpha, beta))
+  }else if (type == ">="){  #compute P(X>=x)
+    return(1 - pbeta(x, alpha, beta))
+  }else{
+    return("Invalid argument for 'type'")
+  }
 }
 @
+Beta distribution is a continuous distribution. We use \texttt{pbeta()} to compute CDF. The function takes a parameter for \texttt{x}, which mist be a number between 0 and 1, and the shape parameters \texttt{alpha} and \texttt{beta}. The function checks if the correct parameters were passed for \texttt{x} and \texttt{type} and it computes the probability for a desired \texttt{type} parameter. Because the distribution is continuous, the function outputs 0 when we request $P(X=x)$ and 1 when we request $P(X \neq x)$.
 \end{enumerate}
 \bibliography{bibliography}
 \end{document}

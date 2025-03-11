@@ -1,5 +1,7 @@
 #where do we use size?
-#specify x limits
+#will it be 0 and 1 for beta
+#or should we use dbeta
+#what do I put in the writeup
 
 #Question 1 - pois.prob function
 pois.prob <- function(x, lambda, type="<="){
@@ -31,9 +33,9 @@ beta.prob <- function(x, alpha, beta, type="<="){
     return("Invalid argument for 'x'")
   }
   if (type == "="){ #compute P(X=x)
-    return(dbeta(x, alpha, beta))
+    return(0) #continuous distribution
   }else if(type == "!="){  #compute P(X!=x)
-    return(1 - dbeta(x, alpha, beta))
+    return(1) #continuous distribution
   }else if(type == "<"){  #compute P(X<x)
     return(pbeta(x, alpha, beta))
   }else if(type == "<="){ #compute P(X<=x)
@@ -46,3 +48,23 @@ beta.prob <- function(x, alpha, beta, type="<="){
     return("Invalid argument for 'type'")
   }
 }
+
+#Test the functions
+#testing pois.prob for each possible return
+print(pois.prob(5,2,"="))
+print(pois.prob(5,2,"!="))
+print(pois.prob(5,2,"<"))
+print(pois.prob(5,2,"<="))
+print(pois.prob(5,2,">"))
+print(pois.prob(5,2,">="))
+print(pois.prob(5,2,"<-"))
+print(pois.prob(-5,2,"<"))
+#testing beta.prob for each possible return
+print(beta.prob(0.5,2,5,"="))
+print(beta.prob(0.5,2,5,"!="))
+print(beta.prob(0.5,2,5,"<"))
+print(beta.prob(0.5,2,5,"<="))
+print(beta.prob(0.5,2,5,">"))
+print(beta.prob(0.5,2,5,">="))
+print(beta.prob(0.5,2,5,">8"))
+print(beta.prob(7,2,5,">="))
