@@ -1,9 +1,12 @@
-#where do we use size?
-#will it be 0 and 1 for beta
-#or should we use dbeta
-#what do I put in the writeup
+################################################################################
+# HW 7 R CODE
+# YULIIA HELEVERIA
+# MATH 240 - SPRING 2025
+################################################################################
 
-#Question 1 - pois.prob function
+################################################################################
+# Question 1: pois.prob() function
+################################################################################
 pois.prob <- function(x, lambda, type="<="){
   #check if x is valid for Poisson distribution
   if (x<0 | x != floor(x)){
@@ -26,7 +29,9 @@ pois.prob <- function(x, lambda, type="<="){
   }
 }
 
-#Question 2 - beta.prob function
+################################################################################
+# Question 2: beta.prob() function
+################################################################################
 beta.prob <- function(x, alpha, beta, type="<="){
   #check if x is valid for Beta distribution
   if (x<0 | x>1){
@@ -49,7 +54,9 @@ beta.prob <- function(x, alpha, beta, type="<="){
   }
 }
 
-#Test the functions
+################################################################################
+# Test the functions
+################################################################################
 #testing pois.prob for each possible return
 print(pois.prob(5,2,"="))
 print(pois.prob(5,2,"!="))

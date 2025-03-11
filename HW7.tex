@@ -75,21 +75,21 @@
 \begin{alltt}
 \hldef{pois.prob} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{,} \hlkwc{lambda}\hldef{,} \hlkwc{type}\hldef{=}\hlsng{"<="}\hldef{)\{}
   \hlcom{#check if x is valid for Poisson distribution}
-  \hlkwa{if} \hldef{(x}\hlopt{<}\hlnum{0} \hlopt{|} \hldef{x} \hlopt{!=} \hlkwd{floor}\hldef{(x))\{}
+  \hlkwa{if} \hldef{(x}\hlopt{<}\hlnum{0} \hlopt{|} \hldef{x} \hlopt{!=} \hlkwd{floor}\hldef{(x))\{} \hlcom{#check if x is a non-negative integer}
     \hlkwd{return}\hldef{(}\hlsng{"Invalid argument for 'x'"}\hldef{)}
   \hldef{\}}
-  \hlkwa{if} \hldef{(type} \hlopt{==} \hlsng{"="}\hldef{)\{} \hlcom{#compute P(X=x)}
+  \hlkwa{if} \hldef{(type} \hlopt{==} \hlsng{"="}\hldef{)\{} \hlcom{#compute P(X=x) using PMF}
     \hlkwd{return}\hldef{(}\hlkwd{dpois}\hldef{(x, lambda))}
   \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"!="}\hldef{)\{}  \hlcom{#compute P(X!=x)}
-    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{dpois}\hldef{(x, lambda))}
-  \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"<"}\hldef{)\{}  \hlcom{#compute P(X<x)}
-    \hlkwd{return}\hldef{(}\hlkwd{ppois}\hldef{(x} \hlopt{-}\hlnum{1}\hldef{, lambda))}
-  \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"<="}\hldef{)\{} \hlcom{#compute P(X<=x)}
+    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{dpois}\hldef{(x, lambda))} \hlcom{# 1 - P(X=x)}
+  \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"<"}\hldef{)\{}  \hlcom{#compute P(X<x) }
+    \hlkwd{return}\hldef{(}\hlkwd{ppois}\hldef{(x} \hlopt{-}\hlnum{1}\hldef{, lambda))} \hlcom{# P(X<x) = P(X<=(x-1))}
+  \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"<="}\hldef{)\{} \hlcom{#compute P(X<=x) using CDF}
     \hlkwd{return}\hldef{(}\hlkwd{ppois}\hldef{(x, lambda))}
   \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{">"}\hldef{)\{}  \hlcom{#compute P(X>x)}
-    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{ppois}\hldef{(x,lambda))}
-  \hldef{\}}\hlkwa{else if} \hldef{(type} \hlopt{==} \hlsng{">="}\hldef{)\{}  \hlcom{#compute P(X>=x)}
-    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{ppois}\hldef{(x} \hlopt{-}\hlnum{1}\hldef{,lambda))}
+    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{ppois}\hldef{(x,lambda))} \hlcom{# P(X>x) = 1 - P(X<=x)}
+  \hldef{\}}\hlkwa{else if} \hldef{(type} \hlopt{==} \hlsng{">="}\hldef{)\{}  \hlcom{#compute P(X>=x) }
+    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{ppois}\hldef{(x} \hlopt{-}\hlnum{1}\hldef{,lambda))} \hlcom{# P(X>=x) = 1 - P(X<=(x-1))}
   \hldef{\}}\hlkwa{else}\hldef{\{}
     \hlkwd{return}\hldef{(}\hlsng{"Invalid argument for 'type'"}\hldef{)}
   \hldef{\}}
@@ -97,7 +97,7 @@
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-Poisson distribution is discrete probability distribution. We use \texttt{dpois()} function to compute PMF and \texttt{ppois()} function to calculate CDF. The parameter \texttt{x} cannot be negative and it must be an integer. The function checks if the correct argument for parameters \texttt{x} and \texttt{type} were passed and the function computes the probability based on the parameter \texttt{type}. 
+Poisson distribution is discrete probability distribution. It models the likelihood of a single event occurring within a given time or space. We use \texttt{dpois()} function to compute PMF and \texttt{ppois()} function to calculate CDF. The parameter \texttt{x} cannot be negative and it must be an integer. The function checks if the correct argument for parameters \texttt{x} and \texttt{type} were passed and the function computes the probability based on the parameter \texttt{type}. 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Question 2
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -110,21 +110,21 @@ Poisson distribution is discrete probability distribution. We use \texttt{dpois(
 \begin{alltt}
 \hldef{beta.prob} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{,} \hlkwc{alpha}\hldef{,} \hlkwc{beta}\hldef{,} \hlkwc{type}\hldef{=}\hlsng{"<="}\hldef{)\{}
   \hlcom{#check if x is valid for Beta distribution}
-  \hlkwa{if} \hldef{(x}\hlopt{<}\hlnum{0} \hlopt{|} \hldef{x}\hlopt{>}\hlnum{1}\hldef{)\{}
+  \hlkwa{if} \hldef{(x}\hlopt{<}\hlnum{0} \hlopt{|} \hldef{x}\hlopt{>}\hlnum{1}\hldef{)\{} \hlcom{#check if x is in between 0 and 1}
     \hlkwd{return}\hldef{(}\hlsng{"Invalid argument for 'x'"}\hldef{)}
   \hldef{\}}
   \hlkwa{if} \hldef{(type} \hlopt{==} \hlsng{"="}\hldef{)\{} \hlcom{#compute P(X=x)}
-    \hlkwd{return}\hldef{(}\hlnum{0}\hldef{)} \hlcom{#continuous distribution}
+    \hlkwd{return}\hldef{(}\hlnum{0}\hldef{)} \hlcom{#continuous distribution, we can measure in finer units}
   \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"!="}\hldef{)\{}  \hlcom{#compute P(X!=x)}
-    \hlkwd{return}\hldef{(}\hlnum{1}\hldef{)} \hlcom{#continuous distribution}
+    \hlkwd{return}\hldef{(}\hlnum{1}\hldef{)} \hlcom{#continuous distribution, we can measure in finer units}
   \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"<"}\hldef{)\{}  \hlcom{#compute P(X<x)}
-    \hlkwd{return}\hldef{(}\hlkwd{pbeta}\hldef{(x, alpha, beta))}
-  \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"<="}\hldef{)\{} \hlcom{#compute P(X<=x)}
+    \hlkwd{return}\hldef{(}\hlkwd{pbeta}\hldef{(x, alpha, beta))} \hlcom{#P(X<x) = P(X<=x)}
+  \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{"<="}\hldef{)\{} \hlcom{#compute P(X<=x) using CDF}
     \hlkwd{return}\hldef{(}\hlkwd{pbeta}\hldef{(x, alpha, beta))}
   \hldef{\}}\hlkwa{else if}\hldef{(type} \hlopt{==} \hlsng{">"}\hldef{)\{}  \hlcom{#compute P(X>x)}
-    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{pbeta}\hldef{(x, alpha, beta))}
+    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{pbeta}\hldef{(x, alpha, beta))} \hlcom{#P(X>x) = 1 - P(X<=x)}
   \hldef{\}}\hlkwa{else if} \hldef{(type} \hlopt{==} \hlsng{">="}\hldef{)\{}  \hlcom{#compute P(X>=x)}
-    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{pbeta}\hldef{(x, alpha, beta))}
+    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{pbeta}\hldef{(x, alpha, beta))} \hlcom{#P(X>=x) = 1 - P(X<=x)}
   \hldef{\}}\hlkwa{else}\hldef{\{}
     \hlkwd{return}\hldef{(}\hlsng{"Invalid argument for 'type'"}\hldef{)}
   \hldef{\}}
@@ -132,7 +132,7 @@ Poisson distribution is discrete probability distribution. We use \texttt{dpois(
 \end{alltt}
 \end{kframe}
 \end{knitrout}
-Beta distribution is a continuous distribution. We use \texttt{pbeta()} to compute CDF. The function takes a parameter for \texttt{x}, which mist be a number between 0 and 1, and the shape parameters \texttt{alpha} and \texttt{beta}. The function checks if the correct parameters were passed for \texttt{x} and \texttt{type} and it computes the probability for a desired \texttt{type} parameter. Because the distribution is continuous, the function outputs 0 when we request $P(X=x)$ and 1 when we request $P(X \neq x)$.
+Beta distribution is a continuous probability distribution. It models continuous random variables whose range is between 0 and 1. We use \texttt{pbeta()} to compute CDF. The function takes a parameter for \texttt{x}, which mist be a number between 0 and 1, and the shape parameters \texttt{alpha} and \texttt{beta}. The function checks if the correct parameters were passed for \texttt{x} and \texttt{type} and it computes the probability for a desired \texttt{type} parameter. Because the distribution is continuous, the function outputs 0 when we request $P(X=x)$ and 1 when we request $P(X \neq x)$.
 \end{enumerate}
 \bibliography{bibliography}
 \end{document}
